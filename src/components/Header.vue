@@ -24,12 +24,35 @@
             <span v-if="favoritesCount > 0" class="badge">{{ favoritesCount }}</span>
           </button>
         </nav>
+        
+        <div class="user-section">
+          <div class="user-info" @click="showProfile = true">
+            <div class="user-avatar">
+              <span class="avatar-text">{{ userInitials }}</span>
+            </div>
+            <div class="user-details">
+              <span class="user-name">{{ user?.name }}</span>
+              <span class="user-role">{{ user?.role === 'admin' ? '👑 Admin' : '👤 User' }}</span>
+            </div>
+            <span class="dropdown-icon">▼</span>
+          </div>
+        </div>
       </div>
     </div>
+    
+    <!-- Modal de Perfil -->
+    <UserProfile 
+      v-if="showProfile" 
+      @close="showProfile = false"
+    />
   <!-- </header> -->
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
+import { useAuth } from '../composables/useAuth.js';
+import UserProfile from './UserProfile.vue';
+
 defineProps({
   activeTab: {
     type: String,
@@ -42,6 +65,19 @@ defineProps({
 });
 
 defineEmits(['tab-change']);
+
+const { user } = useAuth();
+const showProfile = ref(false);
+
+const userInitials = computed(() => {
+  if (!user.value?.name) return '?';
+  return user.value.name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+});
 </script>
 
 <style scoped>
@@ -118,6 +154,73 @@ defineEmits(['tab-change']);
   text-align: center;
 }
 
+.user-section {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: var(--secondary-color);
+  border: 1px solid var(--border-color);
+}
+
+.user-info:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.user-role {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.dropdown-icon {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  transition: all var(--transition-fast);
+}
+
+.user-info:hover .dropdown-icon {
+  color: white;
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -131,6 +234,16 @@ defineEmits(['tab-change']);
   
   .nav-btn {
     flex: 1;
+    justify-content: center;
+  }
+  
+  .user-section {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .user-info {
+    width: 100%;
     justify-content: center;
   }
 }
