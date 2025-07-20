@@ -17,7 +17,7 @@ Uma aplicação moderna e responsiva para gerenciar e visualizar usuários, cons
 
 - **Vue.js 3** - Framework progressivo
 - **Vite** - Build tool rápida
-- **Axios** - Cliente HTTP
+- **Fetch API** - Cliente HTTP nativo
 - **CSS Variables** - Sistema de design consistente
 - **Grid & Flexbox** - Layout responsivo
 - **LocalStorage** - Persistência de dados

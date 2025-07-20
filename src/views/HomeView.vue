@@ -66,7 +66,6 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
 import Header from '../components/Header.vue';
 import SearchBar from '../components/SearchBar.vue';
 import UserCard from '../components/UserCard.vue';
@@ -135,8 +134,14 @@ const loadUsers = async () => {
   error.value = null;
   
   try {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-    users.value = response.data.map(user => ({
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    users.value = data.map(user => ({
       ...user,
       isFavorite: favorites.value.some(fav => fav.id === user.id)
     }));
