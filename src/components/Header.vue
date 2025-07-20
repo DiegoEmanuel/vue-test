@@ -67,6 +67,7 @@ defineEmits(['tab-change']);
   font-weight: 700;
   color: var(--primary-color);
   margin: 0;
+  color: var(--text-primary);
 }
 
 .nav {
@@ -81,7 +82,7 @@ defineEmits(['tab-change']);
   padding: var(--spacing-sm) var(--spacing-md);
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   font-weight: 500;
   border-radius: var(--border-radius-md);
   cursor: pointer;
